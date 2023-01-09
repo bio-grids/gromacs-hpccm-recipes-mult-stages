@@ -31,12 +31,13 @@ os_packages = ['vim',
                'wget']
 
 
-def get_base_image(*, args, cuda=None):
+def get_base_image(*, args, cuda=None, devel=True):
     '''
     Identify the base image to be used in every stage
     '''
+    run_time = '-devel' if devel else '-runtime'
     if cuda is not None:
-        cuda_version_tag = 'nvidia/cuda:' + cuda + '-devel'
+        cuda_version_tag = 'nvidia/cuda:' + cuda + run_time
         if args.centos is not None:
             cuda_version_tag += '-centos' + args.centos
         elif args.ubuntu is not None:
@@ -141,7 +142,7 @@ def get_deployment_stage(*, args, previous_stages, building_blocks, wrapper):
     This deploy the GROMACS along with it dependencies (fftw, mpi) to the final image
     '''
     stage = hpccm.Stage()
-    stage += hpccm.primitives.baseimage(image=get_base_image(args=args, cuda=args.cuda))
+    stage += hpccm.primitives.baseimage(image=get_base_image(args=args, cuda=args.cuda, devel=False))
     stage += hpccm.building_blocks.python(python3=True, python2=False, devel=False)
     stage += hpccm.building_blocks.packages(ospackages=os_packages)
 
