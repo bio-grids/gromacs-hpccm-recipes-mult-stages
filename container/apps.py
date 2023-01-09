@@ -20,7 +20,8 @@ class Gromacs:
                     'liblapack-dev',
                     'wget',
                     'perl',
-                    'ninja-build', ]
+                    'ninja-build',
+                    'gpg-agent', ]
 
     _cmake_opts = "\
                 -D CMAKE_BUILD_TYPE=Release \
